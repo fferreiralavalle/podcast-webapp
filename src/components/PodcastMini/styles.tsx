@@ -5,7 +5,6 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 150px;
   background: transparent;
   border-radius: 1px;
   border: 1px solid #BF4F74;
@@ -18,7 +17,7 @@ export const PodcastImage = styled.img`
 `
 
 export const Title = styled.p`
-    font-size: 18px;
+    font-size: 16px;
     margin: 8px 0px;
 `
 
