@@ -1,7 +1,7 @@
-import { useMemo, useState } from 'react';
 import usePodcast from '../../hooks/usePodcast';
 import Section from '../../components/Section';
 import { useParams } from 'react-router-dom';
+import { Container, LeftContent, MainContent, PodcastImage } from './styles';
 
 const filterByTitleAuthor = (entries, filter) => {
     if (filter === '') return entries
@@ -13,13 +13,21 @@ const filterByTitleAuthor = (entries, filter) => {
 
 const Podacast = () => {
     let { podcastId } = useParams();
-
+    
     const { data, loading } = usePodcast(podcastId);
 
-    console.log({ data })
     return (
         <Section>
-            {loading ? 'Loading' : 'Hello!'}
+            {loading ? 'Loading' : (
+                <Container>
+                    <LeftContent>
+                        <PodcastImage src={data?.image}/>
+                    </LeftContent>
+                    <MainContent>
+
+                    </MainContent>
+                </Container>
+            )}
         </Section>
     )
 }

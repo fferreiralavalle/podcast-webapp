@@ -8,6 +8,7 @@ import Section from '../../components/Section';
 import { useNavigate } from 'react-router-dom';
 import { routes } from '../../App';
 import getRoute from '../../utils/getRoute';
+import useTopPodcasts from '../../hooks/useTopPodcasts';
 
 const filterByTitleAuthor = (entries, filter) => {
     if (filter === '') return entries
@@ -18,18 +19,16 @@ const filterByTitleAuthor = (entries, filter) => {
 }
 
 const MainPage = () => {
-    const navigation = useNavigate();
-    const { data, error, loading } = useFetch(getTopPodcastUrl(100));
+    const { data, loading } = useTopPodcasts()
     const [filter, setFilter] = useState('')
 
-    const parsedData = useMemo(()=> parseEntries(data?.feed?.entry), [data])
-    const filteredData = useMemo(()=> filterByTitleAuthor(parsedData, filter), [parsedData, filter])
+    const filteredData = useMemo(()=> filterByTitleAuthor(data, filter), [data, filter])
 
     return (
         <Section>
             <FilterContainer>
                 <Filter value={filter} onChange={({ target }) => setFilter(target.value)} />
-                <ElementAmount>{filteredData.length}</ElementAmount>
+                <ElementAmount>{filteredData?.length}</ElementAmount>
             </FilterContainer>
             {loading ? 'Loading...' : (
                 <Container>
@@ -39,9 +38,7 @@ const MainPage = () => {
                             author={entry.artist}
                             image={entry.image}
                             key={entry.id}
-                            onClick={()=> navigation(
-                                getRoute(routes.podcast, { podcastId: entry.id })
-                            )}
+                            to={getRoute(routes.podcast, { podcastId: entry.id })}
                         />
                     )))}
                 </Container>

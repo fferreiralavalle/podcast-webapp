@@ -5,11 +5,21 @@ import {
 } from "react-router-dom";
 
 import MainPage from './routes/MainPage'
+import Podacast from './routes/Podast';
+
+export const routes = {
+  home: '/',
+  podcast: '/podcast/:podcastId'
+}
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: routes.home,
     element: <MainPage />,
+  },
+  {
+    path: routes.podcast,
+    element: <Podacast />,
   },
 ]);
 

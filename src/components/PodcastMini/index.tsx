@@ -1,8 +1,9 @@
 import React from 'react'
+import { LinkProps } from 'react-router-dom'
 
 import { Container, Description, PodcastImage, Title } from './styles'
 
-interface PropTypes extends React.PropsWithChildren {
+interface PropTypes extends LinkProps {
     title: string
     author: string
     image: string

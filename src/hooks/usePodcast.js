@@ -1,27 +1,14 @@
-import { useEffect, useState } from "react"
-import { getPodcastUrl } from "../services/itunes"
+import { getCachedPodcast } from "../utils/getCachePodcast"
+import useTopPodcasts from "./useTopPodcasts"
 
 const usePodcast = (id) => {
-    const [loading, setLoading] = useState(true)
-    const [data, setData] = useState(null)
-    const [error, setError] = useState(null)
-
-    useEffect(()=> {
-        fetch(getPodcastUrl(id)).then(
-            (response => response.json()))
-            .then((resData => {
-                setData(resData)
-                setLoading(false)
-            }))
-        .catch((resError => {
-            setError(resError)
-            setLoading(false)
-        }))
-    }, [])
+    // This saves a call since useTopPodcasts will fetch the podcasts only if needed
+    const { loading, error } = useTopPodcasts()
+    const cachedPodcast = getCachedPodcast(id)
 
     return {
         loading,
-        data,
+        data: cachedPodcast,
         error
     }
 }

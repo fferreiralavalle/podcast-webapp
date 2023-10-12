@@ -1,21 +1,25 @@
-import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
-
-export const Container = styled(Link)`
+export const Container = styled.div`
+  width: 100%;
+  height: 100%;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  background: transparent;
-  border-radius: 1px;
-  border: 1px solid #BF4F74;
-  padding: 16px;
-  color: inherit;
 `
 
+export const LeftContent = styled.div`
+  display: flex;
+  flex-basis: 300px;
+  flex-direction: column;
+`
+
+export const MainContent = styled.div`
+  display: flex;
+  flex-basis: 70%;
+  flex-direction: column;
+`
 export const PodcastImage = styled.img`
   display: flex;
-  border-radius: 50%;
+  width: 70%;
 `
 
 export const Title = styled.p`
