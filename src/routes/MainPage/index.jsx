@@ -2,8 +2,12 @@
 import useFetch from '../../hooks/useFetch';
 import { getTopPodcastUrl, parseEntries } from '../../services/itunes';
 import PodcastMini from '../../components/PodcastMini';
-import { Container, ElementAmount, Filter, FilterContainer, Section } from './styles';
+import { Container, ElementAmount, Filter, FilterContainer } from './styles';
 import { useMemo, useState } from 'react';
+import Section from '../../components/Section';
+import { useNavigate } from 'react-router-dom';
+import { routes } from '../../App';
+import getRoute from '../../utils/getRoute';
 
 const filterByTitleAuthor = (entries, filter) => {
     if (filter === '') return entries
@@ -14,6 +18,7 @@ const filterByTitleAuthor = (entries, filter) => {
 }
 
 const MainPage = () => {
+    const navigation = useNavigate();
     const { data, error, loading } = useFetch(getTopPodcastUrl(100));
     const [filter, setFilter] = useState('')
 
@@ -34,6 +39,9 @@ const MainPage = () => {
                             author={entry.artist}
                             image={entry.image}
                             key={entry.id}
+                            onClick={()=> navigation(
+                                getRoute(routes.podcast, { podcastId: entry.id })
+                            )}
                         />
                     )))}
                 </Container>

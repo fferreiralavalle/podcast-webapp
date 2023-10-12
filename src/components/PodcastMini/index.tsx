@@ -9,9 +9,9 @@ interface PropTypes extends React.PropsWithChildren {
 }
 
 const PodcastMini = (props: PropTypes) => {
-    const { title, author, image } = props;
+    const { title, author, image, ...rest } = props;
     return (
-    <Container>
+    <Container {...rest}>
         <PodcastImage src={image} alt={title} />
         <Title>{title}</Title>
         <Description>Author: {author}</Description>
