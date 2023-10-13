@@ -1,14 +1,11 @@
 
-import useFetch from '../../hooks/useFetch';
-import { getTopPodcastUrl, parseEntries } from '../../services/itunes';
 import PodcastMini from '../../components/PodcastMini';
 import { Container, ElementAmount, Filter, FilterContainer } from './styles';
 import { useMemo, useState } from 'react';
 import Section from '../../components/Section';
-import { useNavigate } from 'react-router-dom';
-import { routes } from '../../App';
 import getRoute from '../../utils/getRoute';
 import useTopPodcasts from '../../hooks/useTopPodcasts';
+import routes from '../../constants/routes';
 
 const filterByTitleAuthor = (entries, filter) => {
     if (filter === '') return entries

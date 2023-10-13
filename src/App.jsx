@@ -5,12 +5,8 @@ import {
 } from "react-router-dom";
 
 import MainPage from './routes/MainPage'
-import Podacast from './routes/Podast';
-
-export const routes = {
-  home: '/',
-  podcast: '/podcast/:podcastId'
-}
+import Podacast from './routes/Podcast';
+import routes from './constants/routes';
 
 const router = createBrowserRouter([
   {
