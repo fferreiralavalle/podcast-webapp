@@ -1,9 +1,9 @@
 import { useMemo } from "react"
-import { getPodcastEpisodeUrl, formatPodcastEpisodes } from "../services/itunes"
+import { getPodcastEpisodesUrl, formatPodcastEpisodes } from "../services/itunes"
 import useFetch from "./useFetch"
 
 const usePodcastEpisodes = (id) => {
-    const { data, loading, error } = useFetch(getPodcastEpisodeUrl(id), null)
+    const { data, loading, error } = useFetch(getPodcastEpisodesUrl(id), null)
 
     const formattedData = useMemo(() => formatPodcastEpisodes(data?.results), [data])
 

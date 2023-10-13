@@ -1,15 +1,22 @@
 import { useEffect, useState } from "react"
+import { getCachedResponse, setCacheResponse } from "../services/cache"
+import { dateDiffInDays } from "../utils/shouldUpdatePodcasts"
 
-const useFetch = (url: string, init, stop = false) => {
-    const [loading, setLoading] = useState(!stop)
-    const [data, setData] = useState<object | null>(null)
+const useFetch = (url: string, init, id?: string) => {
+    const cachedResponse = id ? getCachedResponse(id) : null
+    const shouldMakeFetchCall = !cachedResponse || dateDiffInDays(new Date(), cachedResponse?.lastUpdated) > 1;
+    const [loading, setLoading] = useState(shouldMakeFetchCall)
+    const [data, setData] = useState<object | null>(cachedResponse?.response || null)
     const [error, setError] = useState(null)
 
     useEffect(()=> {
-        if (!stop){
+        if (shouldMakeFetchCall){
             fetch(url, init).then(
                 (response => response.json()))
                 .then((resData => {
+                    debugger
+                    if (id)
+                        setCacheResponse(id, resData);
                     setData(resData)
                     setLoading(false)
                 }))
@@ -18,7 +25,7 @@ const useFetch = (url: string, init, stop = false) => {
                 setLoading(false)
             }))
         }
-    }, [stop])
+    }, [shouldMakeFetchCall])
 
     return {
         loading,

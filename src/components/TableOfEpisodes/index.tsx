@@ -20,7 +20,7 @@ const TableOfEpisodes = (props: PropTypes) => {
         {episodes?.map(episode => (
             <tr>
                 <td>{truncateString(episode.title, 60)}</td>
-                <td>{episode.date.toLocaleDateString()}</td>
+                <td>{episode?.date.toLocaleDateString()}</td>
                 <td>{episode.duration}</td>
             </tr>
         ))}

@@ -1,10 +1,20 @@
 import formatDuration from "../utils/formatDuration"
+import formatSummary from "../utils/formatSummary"
 
 export interface TopPodcastItem {
     title: string,
     artist: string,
     image: string,
     id: string
+}
+
+export interface Podcast {
+    title: string,
+    id: string,
+    summary: string,
+    image: string,
+    artist: string,
+    episodes: Array<PodcastEpisodeItem>
 }
 
 export interface PodcastEpisodeItem {
@@ -18,7 +28,7 @@ export const getTopPodcastUrl = (amount) => `https://itunes.apple.com/us/rss/top
 
 export const getPodcastUrl = (podcastId) => `https://itunes.apple.com/lookup?id=${podcastId}&media=podcast`
 
-export const getPodcastEpisodeUrl = (podcastId) => `https://itunes.apple.com/lookup?id=${podcastId}&media=podcast&entity=podcastEpisode&limit=20`
+export const getPodcastEpisodesUrl = (podcastId) => `https://itunes.apple.com/lookup?id=${podcastId}&media=podcast&entity=podcastEpisode&limit=20`
 
 export const formatPodcastsEntries = (entryList): Array<TopPodcastItem> => {
     if (entryList){
@@ -31,6 +41,30 @@ export const formatPodcastsEntries = (entryList): Array<TopPodcastItem> => {
         }))
     }
     return []
+}
+
+export const combinePodcastData = (podcast, summary, episodes): Podcast | null => {
+    if (podcast){
+        return {
+            ...podcast,
+            summary,
+            episodes: episodes
+        }
+    }
+    return null;
+}
+export const formatPodcast = (podcast): Podcast | null => {
+    if (podcast){
+        return {
+            title: podcast.collectionName,
+            id: podcast.collectionId,
+            summary: formatSummary(podcast?.summary),
+            image: podcast.artworkUrl600,
+            artist: podcast.artistName,
+            episodes: formatPodcastEpisodes(podcast.episodes)
+        }
+    }
+    return null;
 }
 
 export const formatPodcastEpisodes = (entryList): Array<PodcastEpisodeItem> => {
