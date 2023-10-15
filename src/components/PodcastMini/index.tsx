@@ -2,6 +2,7 @@ import React from 'react'
 import { LinkProps } from 'react-router-dom'
 
 import { Container, Description, PodcastImage, Title } from './styles'
+import truncateString from '../../utils/truncateString'
 
 interface PropTypes extends LinkProps {
     title: string
@@ -14,7 +15,7 @@ const PodcastMini = (props: PropTypes) => {
     return (
     <Container {...rest}>
         <PodcastImage src={image} alt={title} />
-        <Title>{title}</Title>
+        <Title>{truncateString(title, 25)}</Title>
         <Description>Author: {author}</Description>
     </Container>)
 }

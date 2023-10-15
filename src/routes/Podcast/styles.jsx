@@ -12,7 +12,7 @@ export const LeftContent = styled.div`
   height: fit-content;
   padding: 16px;
   flex-direction: column;
-  border: 1px solid black;
+  box-shadow: 0 3px 10px 0px rgb(0 0 0 / 30%);
   margin-right: 80px;
 `
 
@@ -25,6 +25,12 @@ export const PodcastImage = styled.img`
   display: flex;
   width: 70%;
   align-self: center;
+  margin-bottom: 24px;
+  border-radius: 8px;
+`
+
+export const TitleDescription = styled.div`
+  padding-left: 16px;
   margin-bottom: 16px;
 `
 

@@ -14,7 +14,6 @@ const useFetch = (url: string, init, id?: string) => {
             fetch(url, init).then(
                 (response => response.json()))
                 .then((resData => {
-                    debugger
                     if (id)
                         setCacheResponse(id, resData);
                     setData(resData)

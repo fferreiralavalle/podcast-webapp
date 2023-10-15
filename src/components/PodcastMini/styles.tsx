@@ -8,9 +8,9 @@ export const Container = styled(Link)`
   align-items: center;
   background: transparent;
   border-radius: 1px;
-  border: 1px solid #BF4F74;
-  padding: 16px;
+  padding: 8px;
   color: inherit;
+  box-shadow: 0 3px 10px 0px rgb(0 0 0 / 30%);
 `
 
 export const PodcastImage = styled.img`
@@ -26,4 +26,5 @@ export const Title = styled.p`
 export const Description = styled.p`
     font-size: 12px;
     margin: 4px;
+    color: grey;
 `

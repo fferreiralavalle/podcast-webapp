@@ -24,8 +24,8 @@ const MainPage = () => {
     return (
         <Section>
             <FilterContainer>
-                <Filter value={filter} onChange={({ target }) => setFilter(target.value)} />
                 <ElementAmount>{filteredData?.length}</ElementAmount>
+                <Filter value={filter} onChange={({ target }) => setFilter(target.value)} />
             </FilterContainer>
             {loading ? 'Loading...' : (
                 <Container>

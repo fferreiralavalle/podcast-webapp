@@ -33,7 +33,7 @@ export const getPodcastEpisodesUrl = (podcastId) => `https://itunes.apple.com/lo
 export const formatPodcastsEntries = (entryList): Array<TopPodcastItem> => {
     if (entryList){
         return entryList.map(e => ({
-            title: e.title.label,
+            title: e['im:name'].label,
             summary: e.summary.label,
             artist: e['im:artist'].label,
             image: e['im:image'][e['im:image'].length - 1].label,
