@@ -1,5 +1,7 @@
 import formatDuration from "../utils/formatDuration"
 import formatSummary from "../utils/formatSummary"
+import { getFetchKey } from "./cache"
+import fetchCache, { fetchCacheXML } from "./fetchCache"
 
 export interface TopPodcastItem {
     title: string,
@@ -77,4 +79,27 @@ export const formatPodcastEpisodes = (entryList): Array<PodcastEpisodeItem> => {
         }))
     }
     return []
+}
+
+export const fetchPodcastData = async (podcastId: string) => {
+    const responses =  await Promise.all([
+        fetchCache(getPodcastUrl(podcastId), null, getFetchKey.podcast(podcastId)),
+        fetchCache(getPodcastEpisodesUrl(podcastId), null, getFetchKey.podcastEpidodes(podcastId)),
+       ])
+    const podcastBaseData = responses[0]?.data?.results[0]
+    const podcastEpisodes = responses[1]?.data?.results
+    const podcastSummary = podcastBaseData && (await fetchCacheXML(
+        podcastBaseData?.feedUrl,
+        null,
+        getFetchKey.podcastSummary(podcastId)
+    ))?.data
+    const summaryString = podcastSummary?.querySelector('description')?.textContent;
+    const combinedData = combinePodcastData(podcastBaseData, summaryString, podcastEpisodes)
+    const formatted = formatPodcast(combinedData)
+    return formatted
+}
+
+export const fetchTopPodcastsData = async (amount = 100) => {
+    const result = await fetchCache(getTopPodcastUrl(amount), null, getFetchKey.topPodcasts(amount))
+    return formatPodcastsEntries(result?.data?.feed?.entry)
 }

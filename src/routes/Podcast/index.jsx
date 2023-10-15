@@ -1,17 +1,15 @@
-import usePodcast from '../../hooks/usePodcast';
 import Section from '../../components/Section';
-import { useParams } from 'react-router-dom';
+import { useLoaderData } from 'react-router-dom';
 import { Container, Description, DescriptionTitle, Episodes, LeftContent, MainContent, PodcastImage, TableContainer, Title, TitleDescription } from './styles';
 import TableOfEpisodes from '../../components/TableOfEpisodes';
 
 const Podacast = () => {
-    let { podcastId } = useParams();
     
-    const { data, loading } = usePodcast(podcastId);
+    const data = useLoaderData()
 
     return (
         <Section>
-            {loading ? 'Loading' : (
+            {(
                 <Container>
                     <LeftContent>
                         <PodcastImage src={data?.image}/>

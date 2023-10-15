@@ -4,8 +4,8 @@ import { Container, ElementAmount, Filter, FilterContainer } from './styles';
 import { useMemo, useState } from 'react';
 import Section from '../../components/Section';
 import getRoute from '../../utils/getRoute';
-import useTopPodcasts from '../../hooks/useTopPodcasts';
 import routes from '../../constants/routes';
+import { useLoaderData } from 'react-router-dom';
 
 const filterByTitleAuthor = (entries, filter) => {
     if (filter === '') return entries
@@ -16,7 +16,7 @@ const filterByTitleAuthor = (entries, filter) => {
 }
 
 const MainPage = () => {
-    const { data, loading } = useTopPodcasts()
+    const data = useLoaderData()
     const [filter, setFilter] = useState('')
 
     const filteredData = useMemo(()=> filterByTitleAuthor(data, filter), [data, filter])
@@ -27,19 +27,17 @@ const MainPage = () => {
                 <ElementAmount>{filteredData?.length}</ElementAmount>
                 <Filter value={filter} onChange={({ target }) => setFilter(target.value)} />
             </FilterContainer>
-            {loading ? 'Loading...' : (
-                <Container>
-                    {filteredData && filteredData?.map((entry => (
-                        <PodcastMini
-                            title={entry.title} 
-                            author={entry.artist}
-                            image={entry.image}
-                            key={entry.id}
-                            to={getRoute(routes.podcast, { podcastId: entry.id })}
-                        />
-                    )))}
-                </Container>
-            )}
+            <Container>
+                {filteredData && filteredData?.map((entry => (
+                    <PodcastMini
+                        title={entry.title} 
+                        author={entry.artist}
+                        image={entry.image}
+                        key={entry.id}
+                        to={getRoute(routes.podcast, { podcastId: entry.id })}
+                    />
+                )))}
+            </Container>
         </Section>
     )
 }

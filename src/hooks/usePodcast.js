@@ -40,7 +40,8 @@ const usePodcast = (id) => {
     }, [data, epLoading, epData, combinedData, errorSummary])
 
     return {
-        loading: loading || epLoading || loadingSummary,
+        loading: loading || epLoading,
+        loadingSummary,
         data: combinedData,
         error
     }

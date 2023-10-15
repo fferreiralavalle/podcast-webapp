@@ -3,16 +3,23 @@ enum CacheKeys {
 }
 
 interface CacheResponse {
-    response: object,
+    response: object | string,
     lastUpdated: Date,
 }
 
+export const getFetchKey = {
+    topPodcasts: (amount: number) => `top-podcasts-${amount}`,
+    podcast: (podcastId: string) => `podcast-${podcastId}`,
+    podcastSummary: (podcastId: string) => `podcast-${podcastId}-summary`,
+    podcastEpidodes: (podcastId: string) => `podcast-${podcastId}-episodes`,
+}
+
 export const getCachedResponse = (id: string): CacheResponse | null => {
-    const cachedStrings = localStorage.getItem(CacheKeys.requests)
+    const cachedStrings = localStorage.getItem(id)
     const cachedResponses = JSON.parse(cachedStrings || '{}')
     if (cachedResponses[id]){
         return {
-            ...cachedResponses[id],
+            ...cachedResponses,
             lastUpdated: new Date(cachedResponses[id].date)
         }
     }
@@ -20,14 +27,15 @@ export const getCachedResponse = (id: string): CacheResponse | null => {
 }
 
 export const setCacheResponse = (id: string, data) => {
-    // Get all cached podcast details
-    const cachedStrings = localStorage.getItem(CacheKeys.requests)
-    const cachedResponses = JSON.parse(cachedStrings || '{}')
     // We need the date for refreshing
     const cacheWithDate = {
         response: data,
         lastUpdated: +new Date()
     }
-    cachedResponses[id] = cacheWithDate
-    localStorage.setItem(CacheKeys.requests, JSON.stringify(cachedResponses))
+    try {
+        localStorage.setItem(id, JSON.stringify(cacheWithDate))
+    }
+    catch (e){
+        console.log('Quota size exceeded')
+    }
 }
