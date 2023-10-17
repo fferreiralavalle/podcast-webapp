@@ -13,7 +13,7 @@ export const LeftContent = styled.div`
 export const PodcastImage = styled.img`
   display: flex;
   width: 70%;
-  align-self: center;
+  margin: auto;
   margin-bottom: 24px;
   border-radius: 8px;
 `
