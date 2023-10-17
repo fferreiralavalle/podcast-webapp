@@ -1,4 +1,5 @@
 import React from 'react'
+import HTMLReactParser from 'html-react-parser';
 import Section from '../../components/Section';
 import { useLoaderData } from 'react-router-dom';
 import { Container, EpisodePreview, MainContent, MainEpisodeSummary, MainTitle } from './styles';
@@ -16,7 +17,7 @@ const PodacastEpisode = () => {
                 <PodacastInfo podcast={podcast}/>
                 <MainContent>
                     <MainTitle>{episode?.title}</MainTitle>
-                    <MainEpisodeSummary>{episode?.summary}</MainEpisodeSummary>
+                    <MainEpisodeSummary>{episode?.summary ? HTMLReactParser(episode.summary) : ''}</MainEpisodeSummary>
                     <EpisodePreview controls>
                         <source src={episode?.preview} type="audio/ogg" />
                         Your browser does not support the audio element.

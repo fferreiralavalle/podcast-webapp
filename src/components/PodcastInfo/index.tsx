@@ -1,6 +1,6 @@
 import React from 'react';
+import HTMLReactParser from 'html-react-parser';
 import { Link } from 'react-router-dom'
-import { useLoaderData } from 'react-router-dom';
 import { Description, DescriptionTitle, LeftContent, PodcastImage, Title, TitleDescription } from './styles';
 import getRoute from '../../utils/getRoute';
 import routes from '../../constants/routes';
@@ -17,7 +17,7 @@ const PodacastInfo = ({ podcast, ...props}) => {
                 </TitleDescription>
             </Link>
             <DescriptionTitle>Description</DescriptionTitle>
-            <Description>{podcast?.summary}</Description>
+            <Description>{podcast?.summary ? HTMLReactParser(podcast?.summary) : ''}</Description>
         </LeftContent>
     )
 }
