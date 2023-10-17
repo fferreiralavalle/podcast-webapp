@@ -7,7 +7,8 @@ interface FetchResponse {
 }
 // We need an async function to give to the loader that caches successful data
 const fetchCache = async (url: string, init, id?: string): Promise<FetchResponse> => {
-    const cachedResponse = id ? getCachedResponse(id) : null
+    const isDevEnvironment = import.meta.env.DEV;
+    const cachedResponse = (id && !isDevEnvironment) ? getCachedResponse(id) : null
     const shouldMakeFetchCall = !cachedResponse || dateDiffInDays(new Date(), cachedResponse?.lastUpdated) > 1;
 
     if (shouldMakeFetchCall){
@@ -33,7 +34,8 @@ const fetchCache = async (url: string, init, id?: string): Promise<FetchResponse
 }
 
 export const fetchCacheXML = async (url: string, init, id?: string): Promise<FetchResponse> => {
-    const cachedResponse = id ? getCachedResponse(id) : null
+    const isDevEnvironment = import.meta.env.DEV;
+    const cachedResponse = (id && !isDevEnvironment) ? getCachedResponse(id) : null
     const shouldMakeFetchCall = !cachedResponse || dateDiffInDays(new Date(), cachedResponse?.lastUpdated) > 1;
 
     if (shouldMakeFetchCall){
