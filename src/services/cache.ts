@@ -1,7 +1,3 @@
-enum CacheKeys {
-    requests = 'REQUESTS'
-}
-
 interface CacheResponse {
     response: object | string,
     lastUpdated: Date,
@@ -12,15 +8,16 @@ export const getFetchKey = {
     podcast: (podcastId: string) => `podcast-${podcastId}`,
     podcastSummary: (podcastId: string) => `podcast-${podcastId}-summary`,
     podcastEpidodes: (podcastId: string) => `podcast-${podcastId}-episodes`,
+    podcastEpidode: (episodeId: string) => `podcast-episode-${episodeId}`,
 }
 
 export const getCachedResponse = (id: string): CacheResponse | null => {
     const cachedStrings = localStorage.getItem(id)
-    const cachedResponses = JSON.parse(cachedStrings || '{}')
-    if (cachedResponses[id]){
+    if (cachedStrings){
+        const cachedResponses = JSON.parse(cachedStrings || '{}')
         return {
             ...cachedResponses,
-            lastUpdated: new Date(cachedResponses[id].date)
+            lastUpdated: new Date(cachedResponses.lastUpdated)
         }
     }
     return null
