@@ -4,10 +4,11 @@ import {
   RouterProvider,
 } from "react-router-dom";
 
+import routes from './constants/routes';
 import MainPage from './routes/MainPage'
 import Podacast from './routes/Podcast';
-import routes from './constants/routes';
-import { fetchPodcastData, fetchTopPodcastsData } from './services/itunes';
+import PodacastEpisode from './routes/PodcastEpisode';
+import { fetchPodcastData, fetchPodcastEpisodeData, fetchTopPodcastsData } from './services/itunes';
 
 const router = createBrowserRouter([
   {
@@ -19,6 +20,11 @@ const router = createBrowserRouter([
     path: routes.podcast,
     element: <Podacast />,
     loader: async ({ params }) => fetchPodcastData(params.podcastId)
+  },
+  {
+    path: routes.podcastEpisode,
+    element: <PodacastEpisode />,
+    loader: async ({ params }) => fetchPodcastEpisodeData(params.podcastId, params.episodeId)
   },
 ]);
 

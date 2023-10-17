@@ -1,35 +1,23 @@
 import Section from '../../components/Section';
 import { useLoaderData } from 'react-router-dom';
-import { Container, Description, DescriptionTitle, Episodes, LeftContent, MainContent, PodcastImage, TableContainer, Title, TitleDescription } from './styles';
+import { Container, Episodes, MainContent, TableContainer } from './styles';
 import TableOfEpisodes from '../../components/TableOfEpisodes';
+import PodacastInfo from '../../components/PodcastInfo';
 
 const Podacast = () => {
-    
     const data = useLoaderData()
 
     return (
         <Section>
-            {(
-                <Container>
-                    <LeftContent>
-                        <PodcastImage src={data?.image}/>
-                        <TitleDescription>
-                            <Title>{data?.title}</Title>
-                            <Description>By {data?.artist}</Description>
-                        </TitleDescription>
-                        <DescriptionTitle>Description</DescriptionTitle>
-                        <Description>{data?.summary}</Description>
-                    </LeftContent>
-                    <MainContent>
-                        <>
-                            <Episodes>{`Episodes: ${data?.episodes?.length}`}</Episodes>
-                            <TableContainer>
-                                <TableOfEpisodes episodes={data?.episodes} />
-                            </TableContainer>
-                        </>
-                    </MainContent>
-                </Container>
-            )}
+            <Container>
+                <PodacastInfo podcast={data}/>
+                <MainContent>
+                    <Episodes>{`Episodes: ${data?.episodes?.length}`}</Episodes>
+                    <TableContainer>
+                        <TableOfEpisodes episodes={data?.episodes} podcastId={data.id} />
+                    </TableContainer>
+                </MainContent>
+            </Container>
         </Section>
     )
 }

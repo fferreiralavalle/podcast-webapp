@@ -21,16 +21,25 @@ export interface Podcast {
 
 export interface PodcastEpisodeItem {
     title: string,
+    summary: string,
+    preview: string,
     date: Date,
     duration: string,
     id: string,
+}
+
+export interface PodcastEpisodeView {
+    podcast?: Podcast | null,
+    episode?: PodcastEpisodeItem
 }
 
 export const getTopPodcastUrl = (amount) => `https://itunes.apple.com/us/rss/toppodcasts/limit=${amount}/genre=1310/json`
 
 export const getPodcastUrl = (podcastId) => `https://itunes.apple.com/lookup?id=${podcastId}&media=podcast`
 
-export const getPodcastEpisodesUrl = (podcastId) => `https://itunes.apple.com/lookup?id=${podcastId}&media=podcast&entity=podcastEpisode&limit=20`
+export const getPodcastEpisodeUrl = (episodeId) => `https://itunes.apple.com/lookup?id=${episodeId}&media=podcast&entity=podcastEpisode`
+
+export const getPodcastEpisodesUrl = (podcastId) => `https://itunes.apple.com/lookup?id=${podcastId}&entity=podcastEpisode&limit=20`
 
 export const formatPodcastsEntries = (entryList): Array<TopPodcastItem> => {
     if (entryList){
@@ -71,8 +80,11 @@ export const formatPodcast = (podcast): Podcast | null => {
 
 export const formatPodcastEpisodes = (entryList): Array<PodcastEpisodeItem> => {
     if (entryList){
-        return entryList.map(e => ({
+        const filteredEpisodes = entryList.filter(e => e.wrapperType === 'podcastEpisode')
+        return filteredEpisodes.map(e => ({
             title: e.trackName,
+            summary: e.description,
+            preview: e.previewUrl,
             date: new Date(e.releaseDate),
             duration: formatDuration(e.trackTimeMillis),
             id: e.trackId,
@@ -99,7 +111,19 @@ export const fetchPodcastData = async (podcastId: string) => {
     return formatted
 }
 
+export const fetchPodcastEpisodeData = async (podcastId: string, episodeId: string): Promise<PodcastEpisodeView> => {
+    const response =  await fetchPodcastData(podcastId)
+    // We can't look for the episode directly due to itunes api limitations
+    const episodeData = response?.episodes?.find(ep => ''+ep.id === episodeId)
+
+    return {
+        podcast: response,
+        episode: episodeData,
+    }
+}
+
 export const fetchTopPodcastsData = async (amount = 100) => {
     const result = await fetchCache(getTopPodcastUrl(amount), null, getFetchKey.topPodcasts(amount))
+
     return formatPodcastsEntries(result?.data?.feed?.entry)
 }
