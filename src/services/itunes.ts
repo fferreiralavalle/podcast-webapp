@@ -33,6 +33,48 @@ export interface PodcastEpisodeView {
     episode?: PodcastEpisodeItem
 }
 
+// interfaces for minimized data
+
+export interface TopPodcastItemCached {
+    ['im:name']: string,
+    summary: {
+        label: string
+    },
+    ['im:artist']: {
+        label: string
+    },
+    ['im:image']: Array<{
+        attributes: {
+            height: number
+        }
+        label: string
+    }>,
+    id: {
+        attributes: {
+            ['im:id']: string
+        }
+    }
+}
+
+export interface PodcastCached {
+    collectionName: string,
+    collectionId: number,
+    feedUrl: string,
+    artworkUrl600: string,
+    artistName: string,
+}
+
+export interface EpisodeCached {
+    trackName: string,
+    description: string,
+    previewUrl: string,
+    releaseDate: string,
+    trackTimeMillis: number,
+    trackId: number,
+    wrapperType: string
+}
+
+// Url Getter functions
 export const getTopPodcastUrl = (amount) => `https://itunes.apple.com/us/rss/toppodcasts/limit=${amount}/genre=1310/json`
 
 export const getPodcastUrl = (podcastId) => `https://itunes.apple.com/lookup?id=${podcastId}&media=podcast`
@@ -40,6 +82,8 @@ export const getPodcastUrl = (podcastId) => `https://itunes.apple.com/lookup?id=
 export const getPodcastEpisodeUrl = (episodeId) => `https://itunes.apple.com/lookup?id=${episodeId}&media=podcast&entity=podcastEpisode`
 
 export const getPodcastEpisodesUrl = (podcastId) => `https://itunes.apple.com/lookup?id=${podcastId}&entity=podcastEpisode&limit=20`
+
+// Format and combine Data for view
 
 export const formatPodcastsEntries = (entryList): Array<TopPodcastItem> => {
     if (entryList){
@@ -53,6 +97,8 @@ export const formatPodcastsEntries = (entryList): Array<TopPodcastItem> => {
     }
     return []
 }
+
+// Formaters for view
 
 export const combinePodcastData = (podcast, summary, episodes): Podcast | null => {
     if (podcast){
@@ -80,8 +126,9 @@ export const formatPodcast = (podcast): Podcast | null => {
 
 export const formatPodcastEpisodes = (entryList): Array<PodcastEpisodeItem> => {
     if (entryList){
-        const filteredEpisodes = entryList.filter(e => e.wrapperType === 'podcastEpisode')
-        return filteredEpisodes.map(e => ({
+        return entryList?.
+        filter(e => e.wrapperType === 'podcastEpisode')?.
+        map(e => ({
             title: e.trackName,
             summary: e.description,
             preview: e.previewUrl,
@@ -93,10 +140,79 @@ export const formatPodcastEpisodes = (entryList): Array<PodcastEpisodeItem> => {
     return []
 }
 
+// Cache formatters to save space
+
+export const formatTopPodacastResponse = (response) => {
+    const topFormatted = {
+        feed: {
+            entry: response?.feed?.entry?.map(formatTopPodcastToCache)
+        }
+    }
+    return topFormatted
+}
+
+const formatTopPodcastToCache = (topPodcast): TopPodcastItemCached | null => {
+    if (topPodcast){
+        return {
+            ['im:name']: topPodcast['im:name'],
+            summary: topPodcast.summary,
+            ['im:artist']: topPodcast['im:artist'],
+            ['im:image']: topPodcast['im:image'],
+            id: topPodcast.id,
+        }
+    }
+    return null;
+}
+
+export const formatPodcastResponse = (response) => {
+    const topFormatted = {
+        results: response?.results?.map(formatPodcastToCache)
+    }
+    return topFormatted
+}
+
+const formatPodcastToCache = (podcast): PodcastCached | null => {
+    if (podcast){
+        return {
+            collectionName: podcast.collectionName,
+            collectionId: podcast.collectionId,
+            feedUrl: podcast.feedUrl,
+            artworkUrl600: podcast.artworkUrl600,
+            artistName: podcast.artistName,
+        }
+    }
+    return null;
+}
+
+export const formatPodcastEpisodesResponse = (response) => {
+    const topFormatted = {
+        results: response?.results?.
+            map(formatPodcastEpisodesToCache)
+    }
+    return topFormatted
+}
+
+const formatPodcastEpisodesToCache = (episode): EpisodeCached | null => {
+    if (episode){
+        return {
+            trackName: episode.trackName,
+            description: episode.description,
+            previewUrl: episode.previewUrl,
+            releaseDate: episode.releaseDate,
+            trackTimeMillis: episode.trackTimeMillis,
+            trackId: episode.trackId,
+            wrapperType: episode.wrapperType,
+        }
+    }
+    return null;
+}
+
+// Fetchs for Route Loader
+
 export const fetchPodcastData = async (podcastId: string) => {
     const responses =  await Promise.all([
-        fetchCache(getPodcastUrl(podcastId), null, getFetchKey.podcast(podcastId)),
-        fetchCache(getPodcastEpisodesUrl(podcastId), null, getFetchKey.podcastEpidodes(podcastId)),
+        fetchCache(getPodcastUrl(podcastId), null, getFetchKey.podcast(podcastId), formatPodcastResponse),
+        fetchCache(getPodcastEpisodesUrl(podcastId), null, getFetchKey.podcastEpidodes(podcastId), formatPodcastEpisodesResponse),
        ])
     const podcastBaseData = responses[0]?.data?.results[0]
     const podcastEpisodes = responses[1]?.data?.results
@@ -123,7 +239,11 @@ export const fetchPodcastEpisodeData = async (podcastId: string, episodeId: stri
 }
 
 export const fetchTopPodcastsData = async (amount = 100) => {
-    const result = await fetchCache(getTopPodcastUrl(amount), null, getFetchKey.topPodcasts(amount))
+    const result = await fetchCache(
+        getTopPodcastUrl(amount), null,
+        getFetchKey.topPodcasts(amount),
+        formatTopPodacastResponse
+    )
 
     return formatPodcastsEntries(result?.data?.feed?.entry)
 }
