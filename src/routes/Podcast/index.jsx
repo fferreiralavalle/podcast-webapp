@@ -10,13 +10,14 @@ const Podacast = () => {
     return (
         <Section>
             <Container>
-                <PodacastInfo podcast={data}/>
-                <MainContent>
-                    <Episodes>{`Episodes: ${data?.episodes?.length}`}</Episodes>
-                    <TableContainer>
-                        <TableOfEpisodes episodes={data?.episodes} podcastId={data.id} />
-                    </TableContainer>
-                </MainContent>
+                {data ? (
+                    <><PodacastInfo podcast={data} /><MainContent>
+                        <Episodes>{`Episodes: ${data?.episodes?.length}`}</Episodes>
+                        <TableContainer>
+                            <TableOfEpisodes episodes={data?.episodes} podcastId={data?.id} />
+                        </TableContainer>
+                    </MainContent></>
+                ) : 'Data could not be loaded'}
             </Container>
         </Section>
     )
