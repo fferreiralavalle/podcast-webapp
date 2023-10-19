@@ -25,7 +25,7 @@ const TableOfEpisodes = (props: PropTypes) => {
             </thead>
             <tbody>
                 {episodes?.map(episode => (
-                    <tr>
+                    <tr key={episode?.id}>
                         <td><Link to={
                             getRoute(routes.PODCAST_EPISODE,
                             { episodeId: episode.id, podcastId })}
