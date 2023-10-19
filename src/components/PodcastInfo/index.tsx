@@ -9,7 +9,7 @@ const PodacastInfo = ({ podcast, ...props}) => {
 
     return (
         <LeftContent {...props}>
-            <Link to={getRoute(routes.podcast, { podcastId: podcast?.id})}>
+            <Link to={getRoute(routes.PODCAST, { podcastId: podcast?.id})}>
                 <PodcastImage src={podcast?.image}/>
                 <TitleDescription>
                     <Title>{podcast?.title}</Title>

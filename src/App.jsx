@@ -12,28 +12,25 @@ import { fetchPodcastData, fetchPodcastEpisodeData, fetchTopPodcastsData } from 
 
 const router = createBrowserRouter([
   {
-    path: routes.home,
+    path: routes.HOME,
     element: <MainPage />,
     loader: async () => fetchTopPodcastsData(100)
   },
   {
-    path: routes.podcast,
+    path: routes.PODCAST,
     element: <Podacast />,
     loader: async ({ params }) => fetchPodcastData(params.podcastId)
   },
   {
-    path: routes.podcastEpisode,
+    path: routes.PODCAST_EPISODE,
     element: <PodacastEpisode />,
     loader: async ({ params }) => fetchPodcastEpisodeData(params.podcastId, params.episodeId)
   },
 ]);
 
 function App() {
-
   return (
-    <>
-      <RouterProvider router={router} />
-    </>
+    <RouterProvider router={router} />
   )
 }
 

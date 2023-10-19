@@ -13,7 +13,7 @@ const Navbar = (props: React.PropsWithChildren) => {
     const { children, ...rest } = props
     return (
     <Container {...rest}>
-        <Link to={getRoute(routes.home)}>
+        <Link to={getRoute(routes.HOME)}>
             <PageTitle>Podcaster</PageTitle>
         </Link>
         {navigation.state === 'loading' ? <Loading src={LoadingGif} /> : ""}

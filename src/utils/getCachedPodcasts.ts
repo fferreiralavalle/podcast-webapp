@@ -1,11 +1,11 @@
-export enum storageKeys {
-    topPodcasts = 'TOP_PODCAST_KEY',
-    podcasts = 'PODCAST_KEY',
-    lastUpdated = 'LAST_UPDATED_KEY'
+export enum StorageKeys {
+    TopPodcasts = 'TOP_PODCAST_KEY',
+    Podcasts = 'PODCAST_KEY',
+    LastUpdated = 'LAST_UPDATED_KEY'
 }
 
 export const getTopCachedPodcasts = () => {
-    const topPodcasts = localStorage.getItem(storageKeys.topPodcasts)
+    const topPodcasts = localStorage.getItem(StorageKeys.TopPodcasts)
     if (topPodcasts){
         return JSON.parse(topPodcasts)
     }
@@ -13,17 +13,17 @@ export const getTopCachedPodcasts = () => {
 }
 
 export const setTopCachedPodcasts = (podcastList) => {
-    localStorage.setItem(storageKeys.topPodcasts, JSON.stringify(podcastList))
+    localStorage.setItem(StorageKeys.TopPodcasts, JSON.stringify(podcastList))
     setLastUpdatedPodcasts(new Date())
 }
 
 export const getLastUpdatedPodcasts = (): Date | null => {
-    const dateString = localStorage.getItem(storageKeys.lastUpdated)
+    const dateString = localStorage.getItem(StorageKeys.LastUpdated)
     if (dateString == null) return null;
     const date = new Date(parseInt(dateString));
     return date
 }
 
 export const setLastUpdatedPodcasts = (dateTime: Date) => {
-    localStorage.setItem(storageKeys.lastUpdated, (+dateTime).toString())
+    localStorage.setItem(StorageKeys.LastUpdated, (+dateTime).toString())
 }

@@ -43,4 +43,6 @@ export const Description = styled.p`
     font-size: 12px;
     margin: 0px;
     text-align: left;
+    text-wrap: pretty;
+    word-wrap: break-word;
 `

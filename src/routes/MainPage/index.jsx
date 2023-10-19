@@ -34,7 +34,7 @@ const MainPage = () => {
                         author={entry.artist}
                         image={entry.image}
                         key={entry.id}
-                        to={getRoute(routes.podcast, { podcastId: entry.id })}
+                        to={getRoute(routes.PODCAST, { podcastId: entry.id })}
                     />
                 )))}
             </Container>
